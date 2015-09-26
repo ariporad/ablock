@@ -1,0 +1,52 @@
+{
+  "name": "commitmsg",
+  "version": "0.0.1",
+  "description": "Commit message validation for Github",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "gulp test",
+    "build": "gulp build",
+    "watch": "gulp watch",
+    "lint": "gulp lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/emiw/commitmsg.git"
+  },
+  "author":  {
+    "name": "Ari Porad",
+    "email": "ari@emiw.xyz",
+    "url": "http://ariporad.com"
+  },
+  "contributors":  [],
+  "devDependencies": {
+    "babel": "5",
+    "babel-eslint": "*",
+    "chai": "3",
+    "chai-as-promised": "5",
+    "cz-conventional-changelog": "1",
+    "del": "2",
+    "eslint": "1",
+    "eslint-config-airbnb": "*",
+    "gulp": "3",
+    "gulp-babel": "5",
+    "gulp-changed": "1",
+    "gulp-coveralls": "0.1",
+    "gulp-eslint": "1",
+    "gulp-istanbul": "*",
+    "gulp-mocha": "2",
+    "gulp-sourcemaps": "1",
+    "load-deps": "1",
+    "mocha": "2",
+    "rewire": "2",
+    "sinomocha": "0.2",
+    "sinon": "1",
+    "sinon-chai": "2",
+    "source-map-support": "0.3"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/emiw/commitmsg/issues"
+  },
+  "homepage": "https://github.com/emiw/commitmsg#readme"
+}
