@@ -59,12 +59,17 @@ gulp.task('lint', function lint() {
 
 gulp.task('test', ['lint'], function test(done) {
   compile(SRC_JS, DEST, function runTests() {
+    var doneCalled = false;
     gulp.src(toDest(TESTS))
       .pipe(plugins.mocha(MOCHA_OPTS))
       .on('error', function dontLetMochaExit() {
                this.emit('end');
               })
-      .on('end', done);
+      .on('end', function doneWrapper() {
+               if (doneCalled) return;
+               doneCalled = true;
+               done();
+              });
   });
 });
 
