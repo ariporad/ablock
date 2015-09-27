@@ -1,6 +1,7 @@
 /* (c) 2015 Ari Porad. MIT License: ariporad.mit-license.org */
 var gulp = require('gulp');
 var del = require('del');
+var gutil = require('gulp-util');
 var plugins = require('load-deps')('gulp-*', {
   renameKey: function removeGulp(name) {
     return name.replace(/^gulp-/, '');
@@ -58,13 +59,13 @@ gulp.task('lint', function lint() {
 });
 
 gulp.task('test', ['lint'], function test(done) {
+  console.log('Testing');
   compile(SRC_JS, DEST, function runTests() {
     var doneCalled = false;
-    gulp.src(toDest(TESTS))
+    console.log('Testing');
+    gulp.src(toDest(TESTS), { read: false })
       .pipe(plugins.mocha(MOCHA_OPTS))
-      .on('error', function dontLetMochaExit() {
-               this.emit('end');
-              })
+      .on('error', gutil.log)
       .on('end', function doneWrapper() {
                if (doneCalled) return;
                doneCalled = true;
@@ -107,7 +108,7 @@ gulp.task('test-cov', ['lint', 'build'], function testCov(cb) {
 
 gulp.task('watch', ['test', 'build'], function watch(done) {
   gulp.watch(SRC_JS, ['test']);
-  gulp.watch(SRC_JS.concat(negate(TESTS)), ['build']);
+  //gulp.watch(SRC_JS.concat(negate(TESTS)), ['build']);
 });
 
 gulp.task('clean', function clean() {
