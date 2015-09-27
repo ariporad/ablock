@@ -15,7 +15,13 @@ var SRC_OTHER = [SRC + '/**', '!**/*.js'];
 var SRC_JS = [SRC + '/**/*.js'];
 
 var TESTS = [SRC + '/**/*.test.js'];
-var MOCHA_OPTS = { require: [__dirname + '/' + DEST + '/setup.js', __dirname + '/test/setup.js'] };
+var MOCHA_OPTS = {
+  require: [
+    __dirname + '/' + DEST + '/setup.js',
+    __dirname + '/test/setup.js'
+  ],
+  reporter: 'spec',
+};
 
 function negate(paths) {
   return paths.map(function mapNegate(p) {
@@ -107,8 +113,8 @@ gulp.task('test-cov', ['lint', 'build'], function testCov(cb) {
 });
 
 gulp.task('watch', ['test', 'build'], function watch(done) {
+  MOCHA_OPTS.reporter = 'min';
   gulp.watch(SRC_JS, ['test']);
-  //gulp.watch(SRC_JS.concat(negate(TESTS)), ['build']);
 });
 
 gulp.task('clean', function clean() {

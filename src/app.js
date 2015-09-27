@@ -8,10 +8,11 @@ module.exports.start = (port) => {
   const router = koaRouter();
 
   router.get('/', function* getRoot(next) {
-    this.body = '';
+    this.body = { ok: true };
   });
 
   app
+    .use(formatResponse())
     .use(router.routes())
     .use(router.allowedMethods());
 

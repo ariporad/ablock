@@ -66,10 +66,15 @@ describe('app', () => {
       });
     });
     describe('/', () => {
-      it('200 OK', () => {
+      it('200 OK, JSON', () => {
         return request(server)
           .get('/')
+          .set('Accept', 'application/json')
+          .expect('Content-Type', /json/)
           .expect(200)
+          .expect(({ body }) => {
+            if (body.ok !== true) throw new Error('Expected res.body.ok to be true');
+          })
           .end();
       });
     });
