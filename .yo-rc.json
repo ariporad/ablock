@@ -2,7 +2,7 @@
   "generator-emiw": {
     "banners": {
       "test": [
-        "global expect:false, assert:false",
+        "global expect:false, assert:false, request:false",
         "eslint-env mocha"
       ],
       "file": [],

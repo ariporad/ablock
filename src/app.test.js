@@ -1,5 +1,5 @@
 /* (c) 2015 Ari Porad. MIT License: ariporad.mit-license.org */
-/* global expect:false, assert:false */
+/* global expect:false, assert:false, request:false */
 /* eslint-env mocha */
 const rewire = require('rewire');
 const openport = require('openport');
@@ -20,7 +20,7 @@ function getOpenPort() {
 
 describe('app', () => {
   let application;
-  beforeEach(() => {
+  before(() => {
     application = rewire('./app');
   });
 
@@ -51,6 +51,27 @@ describe('app', () => {
               return server.close();
             });
         });
+    });
+  });
+
+  describe('app', () => {
+    let app;
+    let server;
+    before((done) => {
+      // You can't destructure to existing variables. It's annoying.
+      application.start().then((data) => {
+        app = data.app;
+        server = data.server;
+        done();
+      });
+    });
+    describe('/', () => {
+      it('200 OK', () => {
+        return request(server)
+          .get('/')
+          .expect(200)
+          .end();
+      });
     });
   });
 });

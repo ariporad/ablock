@@ -13,3 +13,4 @@ global.assert = chai.assert;
 require('sinomocha')();
 require('co-mocha');
 
+global.request = require('supertest-promised');

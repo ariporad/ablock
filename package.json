@@ -41,13 +41,13 @@
     "load-deps": "1.0.3",
     "mocha": "2.3.3",
     "openport": "0.0.4",
-    "promisify-supertest": "^1.0.0",
     "rewire": "2.3.4",
     "sinomocha": "0.2.4",
     "sinon": "1.17.1",
     "sinon-chai": "2.8.0",
     "source-map-support": "0.3.2",
-    "supertest": "^1.1.0"
+    "supertest": "^1.1.0",
+    "supertest-promised": "^0.1.0"
   },
   "license": "MIT",
   "bugs": {

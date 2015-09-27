@@ -1,5 +1,5 @@
 /* (c) 2015 Ari Porad. MIT License: ariporad.mit-license.org */
-/* global expect:false, assert:false */
+/* global expect:false, assert:false, request:false */
 /* eslint-env mocha */
 const rewire = require('rewire');
 

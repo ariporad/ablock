@@ -1,12 +1,22 @@
 /* (c) 2015 Ari Porad. MIT License: ariporad.mit-license.org */
 const http = require('http');
 const koa = require('koa');
+const koaRouter = require('koa-router');
 
 module.exports.start = (port) => {
-  return new Promise((done) => {
-    const app = koa();
+  const app = koa();
+  const router = koaRouter();
 
-    const server = http.createServer(app.callback());
+  router.get('/', function* getRoot(next) {
+    this.body = '';
+  });
+
+  app
+    .use(router.routes())
+    .use(router.allowedMethods());
+
+  const server = http.createServer(app.callback());
+  return new Promise((done) => {
     server.listen(port, () => done({ app, server }));
   });
 };
