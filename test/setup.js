@@ -1,7 +1,7 @@
 /* (c) 2015 Ari Porad. MIT License: ariporad.mit-license.org */
 /* global expect:false, assert:false */
 /* eslint-env mocha */
-require('babel/polyfill');
+if (!global._babelPolyfill) require('babel/polyfill');
 var chai = require('chai');
 
 chai.use(require('sinon-chai'));

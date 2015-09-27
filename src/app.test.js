@@ -6,7 +6,6 @@ const openport = require('openport');
 const http = require('http');
 const koa = require('koa');
 
-
 function getOpenPort() {
   return new Promise((good, bad) => {
     openport.find((err, port) => {
@@ -47,7 +46,10 @@ describe('app', () => {
       return getOpenPort()
         .then((port) => {
           return application.start(port)
-            .then(({ server }) => expect(server.address().port).to.equal(port));
+            .then(({ server }) => {
+              expect(server.address().port).to.equal(port);
+              return server.close();
+            });
         });
     });
   });
