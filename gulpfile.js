@@ -15,7 +15,7 @@ var SRC_OTHER = [SRC + '/**', '!**/*.js'];
 var SRC_JS = [SRC + '/**/*.js'];
 
 var TESTS = [SRC + '/**/*.test.js'];
-var MOCHA_OPTS = { require: [__dirname + '/test/setup.js'] };
+var MOCHA_OPTS = { require: [__dirname + '/' + DEST + '/setup.js', __dirname + '/test/setup.js'] };
 
 function negate(paths) {
   return paths.map(function mapNegate(p) {
