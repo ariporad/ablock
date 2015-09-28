@@ -2,6 +2,7 @@
 const http = require('http');
 const koa = require('koa');
 const koaRouter = require('koa-router');
+const formatResponse = require('./middleware/formatResponse');
 
 module.exports.start = (port) => {
   const app = koa();
