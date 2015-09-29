@@ -139,7 +139,10 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
     var uploadStream = gulp.src('coverage/**/lcov.info');
     uploadStream
       .pipe(plugins.coveralls())
-      .on('end', done);
+      .on('end', function dosomething() {
+               console.log('done');
+               done();
+              });
     logErrors(uploadStream);
     uploadStream.on('error', done); // This goes here so that it get's logged first.
   }
