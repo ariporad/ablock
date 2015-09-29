@@ -141,6 +141,7 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
       .pipe(plugins.coveralls())
       .on('end', done);
     logErrors(uploadStream);
+    uploadStream.on('error', done); // This goes here so that it get's logged first.
   }
 
   function runCoverage(testStream) {
