@@ -1,4 +1,4 @@
-/* (c) 2015 Ari Porad (@ariporad) <ari@ariporad.com>. MIT Licensed */
+/* (c) 2015 Ari Porad (@ariporad) <http://ariporad.com>. License: ariporad.mit-license.org */
 
 var github = require('octonode');
 const client = github.client(process.env.GITHUB_TOKEN);

@@ -1,4 +1,4 @@
-/* (c) 2015 Ari Porad. MIT License: ariporad.mit-license.org */
+/* (c) 2015 Ari Porad (@ariporad) <http://ariporad.com>. License: ariporad.mit-license.org */
 /**
  * Validate commit messages
  * See https://docs.google.com/document/d/1rk04jEuGfk9kYzfqCuOlPTSJw3hEDZJTBN5E5f1SALo/edit

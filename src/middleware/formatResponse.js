@@ -1,4 +1,4 @@
-/* (c) 2015 Ari Porad. MIT License: ariporad.mit-license.org */
+/* (c) 2015 Ari Porad (@ariporad) <http://ariporad.com>. License: ariporad.mit-license.org */
 function isErrorStatusCode(status) {
   return [
     status !== 404,

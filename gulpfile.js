@@ -1,4 +1,4 @@
-/* (c) 2015 Ari Porad. MIT License: ariporad.mit-license.org */
+/* (c) 2015 Ari Porad (@ariporad) <http://ariporad.com>. License: ariporad.mit-license.org */
 var gulp = require('gulp');
 var del = require('del');
 var plugins = require('load-deps')('gulp-*', {

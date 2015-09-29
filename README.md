@@ -1,37 +1,33 @@
-# commitmsg
+# A Block
 ---
 
 ### Commit message validation for Github
 
 ---
-[![npm version](https://badge.fury.io/js/commitmsg.svg)](http://badge.fury.io/js/commitmsg) 
-[![Build Status](https://travis-ci.org/emiw/commitmsg.svg)](https://travis-ci.org/emiw/commitmsg) 
-[![Coverage Status](https://coveralls.io/repos/emiw/commitmsg/badge.svg?branch=master&service=github)](https://coveralls.io/github/emiw/commitmsg?branch=master)
-[![Dependency Status](https://david-dm.org/emiw/commitmsg.svg)](https://david-dm.org/emiw/commitmsg) 
-[![devDependency Status](https://david-dm.org/emiw/commitmsg/dev-status.svg)](https://david-dm.org/emiw/commitmsg#info=devDependencies)
+[![npm version](https://badge.fury.io/js/ablock.svg)](http://badge.fury.io/js/ablock) 
+[![Build Status](https://travis-ci.org/ariporad/ablock.svg)](https://travis-ci.org/ariporad/ablock) 
+[![Coverage Status](https://coveralls.io/repos/ariporad/ablock/badge.svg?branch=master&service=github)](https://coveralls.io/github/ariporad/ablock?branch=master)
+[![Dependency Status](https://david-dm.org/ariporad/ablock.svg)](https://david-dm.org/ariporad/ablock) 
+[![devDependency Status](https://david-dm.org/ariporad/ablock/dev-status.svg)](https://david-dm.org/ariporad/ablock#info=devDependencies)
+
 ---
 
 ## Why?
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed eget tempus eros. Sed blandit urna risus, fermentum sagittis
-massa vestibulum eu. Nulla lacinia ut magna tristique lobortis. Donec a justo dictum magna interdum eleifend. Nunc porta
-sem leo, non molestie eros hendrerit vel. Quisque et ante convallis, posuere velit a, pellentesque sapien. Etiam euismod
-tellus non justo vehicula efficitur. 
-
----
-
-## Installation
-
-    npm i -S commitmsg
+I wanted to have a Github status for commit message validation. So here it is.
 
 
 ---
 
-## Usage
 
-   var commitmsg = require('commitmsg');
-   
-   // TODO: Add usage instructions
+## What's with the name?
+
+Well, I couldn't figure out a good one. I figured that this is kind of like your English teacher nagging at you about
+how your sentence is completely messed up. (Except that when they nag you it's in gibberish). I... well, let's say 
+I'm not the world's biggest fan of English class (no matter what you say, vocab is cruel and unusual punishment), so 
+I didn't want to name it after that. But I have English class for A Block (at my school, we have blocks instead of 
+periods, and letters instead of numbers), so I called it that. (And no, it most certainly wasn't because the domain 
+was available.)
    
 
 
@@ -41,7 +37,7 @@ tellus non justo vehicula efficitur.
 
 PRs are welcome! Although, you'll have to sign the CLA.
 
-Please make sure to add tests for anything you add/fix. Run the tests (and lint your code,) with:
+Please make sure to add tests for anything you add/fix. Run the tests (and lint your code) with:
 
     npm run test
 
@@ -55,6 +51,6 @@ You can build the project with:
 
 ## License
 
-[http://emiw.xyz/licnese](http://emiw.xyz/licnese)
+[MIT](http://ariporad.mit-license.org)
 
 
