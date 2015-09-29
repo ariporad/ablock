@@ -4,7 +4,6 @@
 ### Commit message validation for Github
 
 ---
-[![npm version](https://badge.fury.io/js/ablock.svg)](http://badge.fury.io/js/ablock) 
 [![Build Status](https://travis-ci.org/ariporad/ablock.svg)](https://travis-ci.org/ariporad/ablock) 
 [![Coverage Status](https://coveralls.io/repos/ariporad/ablock/badge.svg?branch=master&service=github)](https://coveralls.io/github/ariporad/ablock?branch=master)
 [![Dependency Status](https://david-dm.org/ariporad/ablock.svg)](https://david-dm.org/ariporad/ablock) 

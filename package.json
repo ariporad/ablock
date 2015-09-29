@@ -1,5 +1,5 @@
 {
-  "name": "A Block",
+  "name": "a-block",
   "version": "0.0.1",
   "description": "Commit message validation for Github",
   "main": "dist/index.js",
