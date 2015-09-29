@@ -1,5 +1,12 @@
 /* (c) 2015 Ari Porad. MIT License: ariporad.mit-license.org */
-module.exports = function makeResponseFormatter() {
+function isErrorStatusCode(status) {
+  return [
+    status !== 404,
+    status >= 300 || status < 200,
+  ].reduce((ok, isError) => ok && isError, true);
+}
+
+function makeResponseFormatter() {
   return function* formatResponse(next) {
     let isError = false;
     try {
@@ -10,8 +17,12 @@ module.exports = function makeResponseFormatter() {
     }
     if (this.body instanceof Error || isError) {
       this.body = { ok: false, error: (this.body instanceof Error ? this.body.message : this.body) };
+      if (!isErrorStatusCode(this.status)) this.status = 500;
     } else {
       this.body = { ok: true, payload: this.body };
     }
   };
-};
+}
+
+module.exports = makeResponseFormatter;
+module.exports._isErrorStatusCode = isErrorStatusCode;

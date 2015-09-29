@@ -1,12 +1,13 @@
 /* (c) 2015 Ari Porad. MIT License: ariporad.mit-license.org */
 var gulp = require('gulp');
 var del = require('del');
-var gutil = require('gulp-util');
 var plugins = require('load-deps')('gulp-*', {
   renameKey: function removeGulp(name) {
     return name.replace(/^gulp-/, '');
   },
 });
+
+function noop() {}
 
 var SRC = 'src';
 var DEST = 'build';
@@ -64,19 +65,20 @@ gulp.task('lint', function lint() {
     .pipe(plugins.eslint.failAfterError());
 });
 
-gulp.task('test', ['lint'], function test(done) {
-  console.log('Testing');
+function test(done){
   compile(SRC_JS, DEST, function runTests() {
-    var doneCalled = false;
-    console.log('Testing');
-    gulp.src(toDest(TESTS), { read: false })
-      .pipe(plugins.mocha(MOCHA_OPTS))
-      .on('error', gutil.log)
-      .on('end', function doneWrapper() {
-               if (doneCalled) return;
-               doneCalled = true;
-               done();
-              });
+    done(
+      gulp.src(toDest(TESTS), { read: false })
+        .pipe(plugins.mocha(MOCHA_OPTS))
+        .on('error', noop)
+    );
+  });
+}
+
+gulp.task('test', ['lint'], function testTask(done) {
+  test(function runTests(stream) {
+    stream.on('error', process.exit.bind(process, 1));
+    stream.on('end', process.exit.bind(process, 0));
   });
 });
 
@@ -90,6 +92,11 @@ gulp.task('test-cov', ['lint', 'build'], function testCov(cb) {
               .pipe(plugins.mocha(MOCHA_OPTS))
               .pipe(plugins.istanbul.writeReports()) // Creating the reports after tests ran
               .pipe(plugins.istanbul.enforceThresholds({ thresholds: { global: 90 } })) // Min CC
+              .on('error', function die(err) {
+                err.message && console.error(err.message);
+                err.stack && console.error(err.stack);
+                process.exit(1);
+              })
               .on('end', function uploadCoverage(err) {
                     if (err) return cb(err);
                     gulp.src('coverage/**/lcov.info')
@@ -102,19 +109,25 @@ gulp.task('test-cov', ['lint', 'build'], function testCov(cb) {
                                 'on Travis! No problem, but I\'m not going to upload code coverage.'
                               );
                               cb();
+                              setImmidiate(process.exit.bind(process, 0));
                             } else {
-                              cb(err)
+                              cb(err);
+                              setImmidiate(process.exit.bind(process, 0));
                             }
                           })
-                      .on('end', cb);
+                      .on('end', process.exit.bind(process, 0));
                   });
           });
   })
 });
 
-gulp.task('watch', ['test', 'build'], function watch(done) {
+gulp.task('watch', ['build'], function watch(done) {
   MOCHA_OPTS.reporter = 'min';
-  gulp.watch(SRC_JS, ['test']);
+  gulp.watch(SRC_JS, function runTests() {
+    test(function runTests(stream) {
+      stream.on('error', noop);
+    });
+  });
 });
 
 gulp.task('clean', function clean() {

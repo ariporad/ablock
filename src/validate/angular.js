@@ -36,10 +36,10 @@ function validateMessage(message) {
   const match = PATTERN.exec(message);
 
   if (!match) {
-    return makeOutput(false, `Commit message does not match "<type>(<scope>): <subject>"! It was: ${message}`, false);
+    return makeOutput(false, `Commit message does not match "<type>(<scope>): <subject>"!`, false);
   }
 
-  const [, type, , scope, subject ] = match;
+  const [, type /* , , scope, subject */ ] = match;
 
   if (TYPES.indexOf(type) === -1) {
     return makeOutput(false, `"${type}" is not an allowed type!`, false);
