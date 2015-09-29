@@ -133,7 +133,7 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
     });
   }
 
-  function uploadCoverage(testStream, coverageStream) {
+  function uploadCoverage(coverageStream) {
     // Only upload coverage once
     if ((process.env.TRAVIS_JOB_NUMBER || '0.1').split('.').pop() !== '1') return done();
     var uploadStream = gulp.src('coverage/**/lcov.info');
@@ -144,19 +144,10 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
     uploadStream.on('error', done); // This goes here so that it get's logged first.
   }
 
-  function runCoverage(testStream) {
-    testCoverage(function coverage(coverageStream) {
-      handleDidError(coverageStream);
-      coverageStream.on('end', function afterCoverage() {
-        uploadCoverage(testStream, coverageStream);
-      });
-    });
-  }
-
-  test(function testing(testStream) {
-    handleDidError(testStream);
-    testStream.on('end', function afterTests() {
-      runCoverage(testStream);
+  testCoverage(function coverage(coverageStream) {
+    handleDidError(coverageStream);
+    coverageStream.on('end', function afterCoverage() {
+      uploadCoverage(coverageStream);
     });
   });
 });
