@@ -9,11 +9,8 @@ const koa = require('koa');
 function getOpenPort() {
   return new Promise((good, bad) => {
     openport.find((err, port) => {
-      if (err) {
-        bad(err);
-      } else {
-        good(port);
-      }
+      if (err) bad(err);
+      else good(port);
     });
   });
 }
@@ -64,6 +61,8 @@ describe('app', () => {
         server = data.server;
         done();
       });
+
+      //throw new Error('testing');
     });
     describe('/', () => {
       it('200 OK, JSON', () => {
