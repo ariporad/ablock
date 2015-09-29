@@ -8,6 +8,12 @@ var plugins = require('load-deps')('gulp-*', {
 });
 
 function noop() {}
+function logErrors(stream) {
+  stream.on('error', function logError(err) {
+    err.message && console.error(err.message);
+    err.stack && console.error(err.stack);
+  })
+}
 
 var SRC = 'src';
 var DEST = 'build';
@@ -70,7 +76,7 @@ function test(done){
     done(
       gulp.src(toDest(TESTS), { read: false })
         .pipe(plugins.mocha(MOCHA_OPTS))
-        .on('error', noop)
+        .on('error', logError)
     );
   });
 }
@@ -82,43 +88,80 @@ gulp.task('test', ['lint'], function testTask(done) {
   });
 });
 
-gulp.task('test-cov', ['lint', 'build'], function testCov(cb) {
+function testCoverage(done) {
   compile(SRC_JS, DEST, function runTests() {
     gulp.src(toDest(SRC_JS.concat(negate(TESTS))))
       .pipe(plugins.istanbul()) // Covering files
       .pipe(plugins.istanbul.hookRequire()) // Force `require` to return covered files
       .on('finish', function runTests() {
-            gulp.src(toDest(TESTS))
+            done(
+              gulp.src(toDest(TESTS))
               .pipe(plugins.mocha(MOCHA_OPTS))
               .pipe(plugins.istanbul.writeReports()) // Creating the reports after tests ran
               .pipe(plugins.istanbul.enforceThresholds({ thresholds: { global: 90 } })) // Min CC
-              .on('error', function die(err) {
+              .on('error', function log(err) {
                 err.message && console.error(err.message);
                 err.stack && console.error(err.stack);
-                process.exit(1);
               })
-              .on('end', function uploadCoverage(err) {
-                    if (err) return cb(err);
-                    gulp.src('coverage/**/lcov.info')
-                      .pipe(plugins.coveralls())
-                      .on('error', function ignoreNoProjectFoundErrors(err) {
-                            if (err.message.indexOf('find') > -1 &&
-                                err.message.indexOf('repo') > -1) {
-                              console.log(
-                                'Hey, it looks like you haven\'t setup coveralls yet, or you\'re not ' +
-                                'on Travis! No problem, but I\'m not going to upload code coverage.'
-                              );
-                              cb();
-                              setImmidiate(process.exit.bind(process, 0));
-                            } else {
-                              cb(err);
-                              setImmidiate(process.exit.bind(process, 0));
-                            }
-                          })
-                      .on('end', process.exit.bind(process, 0));
-                  });
+            );
           });
   })
+}
+
+gulp.task('test:cov', ['lint', 'build'], function testCov(done) {
+  testCoverage(function setupExit(stream) {
+    stream
+      .on('error', function dieScreaming(err) {
+        setTimeout(process.exit.bind(process, 1), 50); // Let the event loop clear
+      })
+      .on('end', function dieNicely() {
+        setTimeout(process.exit.bind(process, 0), 50); // Let the event loop clear
+      });
+  });
+});
+
+gulp.task('travis', ['lint'], function uploadCoverage(cb) {
+  var didError = false;
+  function done() {
+    if (didError) {
+      process.exit(1);
+    } else {
+      process.exit(0);
+    }
+  }
+
+  // Set didError to true on error
+  function handleDidError(stream) {
+    stream.on('error', function onError() {
+      didError = true;
+    });
+  }
+
+  function uploadCoverage(testStream, coverageStream) {
+    // Only upload coverage once
+    if (process.env.TRAVIS_JOB_NUMBER.split('.').pop() !== '1') return done();
+    var uploadStream = gulp.src('coverage/**/lcov.info');
+    uploadStream
+      .pipe(plugins.coveralls())
+      .on('end', done);
+    logErrors(uploadStream);
+  }
+
+  function runCoverage(testStream) {
+    testCoverage(function coverage(coverageStream) {
+      handleDidError(coverageStream);
+      coverageStream.on('end', function afterCoverage() {
+        uploadCoverage(testStream, coverageStream);
+      });
+    });
+  }
+
+  test(function testing(testStream) {
+    handleDidError(testStream);
+    testStream.on('end', function afterTests() {
+      runCoverage(testStream);
+    });
+  });
 });
 
 gulp.task('watch', ['build'], function watch(done) {

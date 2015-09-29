@@ -5,9 +5,11 @@
   "main": "dist/index.js",
   "scripts": {
     "test": "gulp test",
+    "test:cov": "gulp test:cov",
     "build": "gulp build",
     "watch": "gulp watch",
-    "lint": "gulp lint"
+    "lint": "gulp lint",
+    "travis": "gulp travis"
   },
   "repository": {
     "type": "git",
