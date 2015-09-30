@@ -155,7 +155,8 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
     shell.exec([
       'cd ' + __dirname,
       'cat ' + __dirname + '/coverage/lcov.info | ' + __dirname + '/node_modules/coveralls/bin/coveralls.js'
-    ].join(';'))
+    ].join(';'));
+    done();
   });
 
   testCoverage(function coverage(coverageStream) {
