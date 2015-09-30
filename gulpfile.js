@@ -142,7 +142,10 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
                done();
               });
     logErrors(uploadStream);
-    uploadStream.on('error', done); // This goes here so that it get's logged first.
+    uploadStream.on('error', function dosomething() {
+      console.log('doneE');
+      done();
+    }); // This goes here so that it gets logged first.
   });
 
   testCoverage(function coverage(coverageStream) {
