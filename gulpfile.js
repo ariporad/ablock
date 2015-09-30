@@ -121,7 +121,6 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
   var didError = false;
 
   function done() {
-    console.log('All Done!');
     // Make sure didError is a boolean, then cast to a number (exit 0 if no error, 1 if error)
     process.exit(+!!didError);
   }
@@ -135,24 +134,9 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
 
   var uploadCoverage = once(function uploadCoverage(coverageStream) {
     // Only upload coverage once
-    if ((process.env.TRAVIS_JOB_NUMBER || '0.1').split('.').pop() !== '1') return done();
-    //var uploadStream = gulp.src('coverage/**/lcov.info')
-    //  .pipe(plugins.debug({ title: 'in:' }))
-    //  .pipe(plugins.coveralls())
-    //  .pipe(plugins.debug({ title: 'out:' }))
-    //  .on('end', function dosomething() {
-    //           console.log('done');
-    //           done();
-    //          })
-    //  .on('error', function dosomething() {
-    //    console.log('doneE');
-    //    done();
-    //  }); // This goes here so that it gets logged first.
-    //
-    //console.log('Uploading...');
-    //uploadStream._flush();
-    //setTimeout(function () { console.log(uploadStream); }, 5000);
+    if ((process.env.TRAVIS_JOB_NUMBER || '0.1').split('.').pop() === '1') return done();
     shell.exec([
+      // Each item is one command.
       'cd ' + __dirname,
       'cat ' + __dirname + '/coverage/lcov.info | ' + __dirname + '/node_modules/coveralls/bin/coveralls.js'
     ].join(';'));
@@ -161,14 +145,9 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
 
   testCoverage(function coverage(coverageStream) {
     handleDidError(coverageStream);
-
-    var afterCoverage = once(function afterCoverage(err) {
-      console.log('done with coverage: ', err ? 'error' : 'end');
+    coverageStream.on('end', once(function afterCoverage(err) {
       uploadCoverage(coverageStream);
-    });
-
-    coverageStream.on('error', noop);
-    coverageStream.on('end', afterCoverage);
+    }));
   });
 });
 
