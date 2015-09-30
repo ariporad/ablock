@@ -1,6 +1,7 @@
 /* (c) 2015 Ari Porad (@ariporad) <http://ariporad.com>. License: ariporad.mit-license.org */
 var gulp = require('gulp');
 var del = require('del');
+var once = require('once');
 var plugins = require('load-deps')('gulp-*', {
   renameKey: function removeGulp(name) {
     return name.replace(/^gulp-/, '');
@@ -119,7 +120,8 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
   var didError = false;
 
   function done() {
-    process.exit(+didError);
+    // Make sure didError is a boolean, then cast to a number (exit 0 if no error, 1 if error)
+    process.exit(+!!didError);
   }
 
   // Set didError to true on error
@@ -129,7 +131,7 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
     });
   }
 
-  function uploadCoverage(coverageStream) {
+  var uploadCoverage = once(function uploadCoverage(coverageStream) {
     // Only upload coverage once
     if ((process.env.TRAVIS_JOB_NUMBER || '0.1').split('.').pop() !== '1') return done();
     var uploadStream = gulp.src('coverage/**/lcov.info');
@@ -141,15 +143,15 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
               });
     logErrors(uploadStream);
     uploadStream.on('error', done); // This goes here so that it get's logged first.
-  }
+  });
 
   testCoverage(function coverage(coverageStream) {
     handleDidError(coverageStream);
 
-    function afterCoverage(err) {
+    var afterCoverage = once(function afterCoverage(err) {
       console.log('done with coverage: ', err ? 'error' : 'end');
       uploadCoverage(coverageStream);
-    }
+    });
 
     coverageStream.on('error', afterCoverage)
     coverageStream.on('end', afterCoverage);
