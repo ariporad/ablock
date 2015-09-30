@@ -119,11 +119,7 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
   var didError = false;
 
   function done() {
-    if (didError) {
-      process.exit(1);
-    } else {
-      process.exit(0);
-    }
+    process.exit(+didError);
   }
 
   // Set didError to true on error
@@ -149,9 +145,13 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
 
   testCoverage(function coverage(coverageStream) {
     handleDidError(coverageStream);
-    coverageStream.on('end', function afterCoverage() {
+
+    function afterCoverage() {
       uploadCoverage(coverageStream);
-    });
+    }
+
+    coverageStream.on('error', afterCoverage)
+    coverageStream.on('end', afterCoverage);
   });
 });
 
