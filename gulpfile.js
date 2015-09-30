@@ -120,6 +120,7 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
   var didError = false;
 
   function done() {
+    console.log('All Done!');
     // Make sure didError is a boolean, then cast to a number (exit 0 if no error, 1 if error)
     process.exit(+!!didError);
   }
@@ -149,6 +150,7 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
   });
 
   testCoverage(function coverage(coverageStream) {
+    logErrors(coverageStream);
     handleDidError(coverageStream);
 
     var afterCoverage = once(function afterCoverage(err) {
