@@ -137,7 +137,9 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
     if ((process.env.TRAVIS_JOB_NUMBER || '0.1').split('.').pop() !== '1') return done();
     var uploadStream = gulp.src('coverage/**/lcov.info');
     uploadStream
+      .pipe(plugins.debug({ title: 'in:' }))
       .pipe(plugins.coveralls())
+      .pipe(plugins.debug({ title: 'out:' }))
       .on('end', function dosomething() {
                console.log('done');
                done();
