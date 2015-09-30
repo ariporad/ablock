@@ -146,7 +146,8 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
   testCoverage(function coverage(coverageStream) {
     handleDidError(coverageStream);
 
-    function afterCoverage() {
+    function afterCoverage(err) {
+      console.log('done with coverage: ', err ? 'error' : 'end');
       uploadCoverage(coverageStream);
     }
 
