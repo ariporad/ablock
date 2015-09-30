@@ -135,8 +135,7 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
   var uploadCoverage = once(function uploadCoverage(coverageStream) {
     // Only upload coverage once
     if ((process.env.TRAVIS_JOB_NUMBER || '0.1').split('.').pop() !== '1') return done();
-    var uploadStream = gulp.src('coverage/**/lcov.info');
-    uploadStream
+    var uploadStream = gulp.src('coverage/**/lcov.info')
       .pipe(plugins.debug({ title: 'in:' }))
       .pipe(plugins.coveralls())
       .pipe(plugins.debug({ title: 'out:' }))
@@ -151,6 +150,7 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
     }); // This goes here so that it gets logged first.
 
     console.log('Uploading...');
+    console.log(uploadStream);
   });
 
   testCoverage(function coverage(coverageStream) {
