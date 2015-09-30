@@ -147,10 +147,11 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
       console.log('doneE');
       done();
     }); // This goes here so that it gets logged first.
+
+    console.log('Uploading...');
   });
 
   testCoverage(function coverage(coverageStream) {
-    logErrors(coverageStream);
     handleDidError(coverageStream);
 
     var afterCoverage = once(function afterCoverage(err) {
@@ -158,7 +159,7 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
       uploadCoverage(coverageStream);
     });
 
-    coverageStream.on('error', afterCoverage)
+    coverageStream.on('error', noop);
     coverageStream.on('end', afterCoverage);
   });
 });
