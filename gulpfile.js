@@ -2,6 +2,7 @@
 var gulp = require('gulp');
 var del = require('del');
 var once = require('once');
+var shell = require('shelljs');
 var plugins = require('load-deps')('gulp-*', {
   renameKey: function removeGulp(name) {
     return name.replace(/^gulp-/, '');
@@ -135,22 +136,26 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
   var uploadCoverage = once(function uploadCoverage(coverageStream) {
     // Only upload coverage once
     if ((process.env.TRAVIS_JOB_NUMBER || '0.1').split('.').pop() !== '1') return done();
-    var uploadStream = gulp.src('coverage/**/lcov.info')
-      .pipe(plugins.debug({ title: 'in:' }))
-      .pipe(plugins.coveralls())
-      .pipe(plugins.debug({ title: 'out:' }))
-      .on('end', function dosomething() {
-               console.log('done');
-               done();
-              })
-      .on('error', function dosomething() {
-        console.log('doneE');
-        done();
-      }); // This goes here so that it gets logged first.
-
-    console.log('Uploading...');
-    uploadStream._flush();
-    setTimeout(function () { console.log(uploadStream); }, 5000);
+    //var uploadStream = gulp.src('coverage/**/lcov.info')
+    //  .pipe(plugins.debug({ title: 'in:' }))
+    //  .pipe(plugins.coveralls())
+    //  .pipe(plugins.debug({ title: 'out:' }))
+    //  .on('end', function dosomething() {
+    //           console.log('done');
+    //           done();
+    //          })
+    //  .on('error', function dosomething() {
+    //    console.log('doneE');
+    //    done();
+    //  }); // This goes here so that it gets logged first.
+    //
+    //console.log('Uploading...');
+    //uploadStream._flush();
+    //setTimeout(function () { console.log(uploadStream); }, 5000);
+    shell.exec([
+      'cd ' + __dirname,
+      'cat ' + __dirname + '/coverage/lcov.info | ' + __dirname + '/node_modules/coveralls/bin/coveralls.js'
+    ].join(';'))
   });
 
   testCoverage(function coverage(coverageStream) {
