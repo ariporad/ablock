@@ -149,6 +149,7 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
       }); // This goes here so that it gets logged first.
 
     console.log('Uploading...');
+    uploadStream._flush();
     setTimeout(function () { console.log(uploadStream); }, 5000);
   });
 
