@@ -20,7 +20,8 @@ const TYPES = [
   'revert',
 ];
 
-function makeOutput(ok = true, error = null, ignore = false) {
+/* istanbul ignore next: a) nothing to test, b) implimentation detail */
+function makeOutput(ok, error = null, ignore = false) {
   return { ok, error, ignore };
 }
 
