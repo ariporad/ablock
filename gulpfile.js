@@ -41,6 +41,10 @@ var MOCHA_OPTS = {
   reporter: 'spec',
 };
 
+var BABEL_OPTIONS = {
+  babelrc: __dirname + '/.babelrc',
+};
+
 function toDest(paths) {
   return paths.map(function mapToDest(path) {
     return path.replace(SRC, DEST);
@@ -51,7 +55,7 @@ function compile(src, dest, cb) {
   var stream = gulp.src(src)
     .pipe(plugins.changed(dest))
     .pipe(plugins.sourcemaps.init())
-    .pipe(plugins.babel())
+    .pipe(plugins.babel(BABEL_OPTIONS))
     .pipe(plugins.sourcemaps.write())
     .pipe(gulp.dest(dest));
   if (cb && typeof cb === 'function') stream.on('finish', cb);
