@@ -1,4 +1,5 @@
 /* (c) 2015 Ari Porad (@ariporad) <http://ariporad.com>. License: ariporad.mit-license.org */
+/* eslint no-var:0, prefer-const: 0, vars-on-top: 0 */
 var gulp = require('gulp');
 var del = require('del');
 var once = require('once');
@@ -9,38 +10,40 @@ var plugins = require('load-deps')('gulp-*', {
   },
 });
 
-function noop() {}
 function logErrors(stream) {
   stream.on('error', function logError(err) {
     err.message && console.error(err.message);
     err.stack && console.error(err.stack);
-  })
+  });
+}
+
+function negate(paths) {
+  return paths.map(function mapNegate(path) {
+    return '!' + path;
+  });
 }
 
 var SRC = 'src';
 var DEST = 'build';
+var SPIKES = './spikes';
 
 var SRC_OTHER = [SRC + '/**', '!**/*.js'];
 var SRC_JS = [SRC + '/**/*.js'];
+
+var LINT_OTHER = [__filename, SPIKES + '/**.js'];
 
 var TESTS = [SRC + '/**/*.test.js'];
 var MOCHA_OPTS = {
   require: [
     __dirname + '/' + DEST + '/setup.js',
-    __dirname + '/test/setup.js'
+    __dirname + '/test/setup.js',
   ],
   reporter: 'spec',
 };
 
-function negate(paths) {
-  return paths.map(function mapNegate(p) {
-    return '!' + p;
-  });
-}
-
 function toDest(paths) {
-  return paths.map(function mapToDest(p) {
-    return p.replace(SRC, DEST);
+  return paths.map(function mapToDest(path) {
+    return path.replace(SRC, DEST);
   });
 }
 
@@ -67,7 +70,7 @@ gulp.task('copy:other', function copy() {
 });
 
 gulp.task('lint', function lint() {
-  return gulp.src(SRC_JS)
+  return gulp.src(SRC_JS.concat(LINT_OTHER))
     .pipe(plugins.eslint())
     .pipe(plugins.eslint.format())
     .pipe(plugins.eslint.failAfterError());
@@ -90,34 +93,34 @@ gulp.task('test', ['lint'], function testTask(done) {
 });
 
 function testCoverage(done) {
-  compile(SRC_JS, DEST, function runTests() {
+  compile(SRC_JS, DEST, function instrumentCode() {
     gulp.src(toDest(SRC_JS.concat(negate(TESTS))))
       .pipe(plugins.istanbul()) // Covering files
       .pipe(plugins.istanbul.hookRequire()) // Force `require` to return covered files
       .on('finish', function runTests() {
-            var coverageStream = gulp.src(toDest(TESTS))
-              .pipe(plugins.mocha(MOCHA_OPTS))
-              .pipe(plugins.istanbul.writeReports()) // Creating the reports after tests ran
-              .pipe(plugins.istanbul.enforceThresholds({ thresholds: { global: 90 } })); // Min CC
-            logErrors(coverageStream);
-            done(coverageStream);
-          });
-  })
+        var coverageStream = gulp.src(toDest(TESTS))
+          .pipe(plugins.mocha(MOCHA_OPTS))
+          .pipe(plugins.istanbul.writeReports()) // Creating the reports after tests ran
+          .pipe(plugins.istanbul.enforceThresholds({ thresholds: { global: 90 } })); // Min CC
+        logErrors(coverageStream);
+        done(coverageStream);
+      });
+  });
 }
 
 gulp.task('test:cov', ['lint', 'build'], function testCov(done) {
   testCoverage(function setupExit(stream) {
     stream
       .on('error', function dieScreaming(err) {
-            setTimeout(process.exit.bind(process, 1), 50); // Let the event loop clear
-          })
+        setTimeout(process.exit.bind(process, 1), 50); // Let the event loop clear
+      })
       .on('end', function dieNicely() {
-            setTimeout(process.exit.bind(process, 0), 50); // Let the event loop clear
-          });
+        setTimeout(process.exit.bind(process, 0), 50); // Let the event loop clear
+      });
   });
 });
 
-gulp.task('travis', ['lint'], function uploadCoverage(cb) {
+gulp.task('travis', ['lint'], function travis(cb) {
   var didError = false;
 
   function done() {
@@ -132,13 +135,13 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
     });
   }
 
-  var uploadCoverage = once(function uploadCoverage(coverageStream) {
+  var uploadCoverage = once(function uploadToCoveralls(coverageStream) {
     // Only upload coverage once
     if ((process.env.TRAVIS_JOB_NUMBER || '0.1').split('.').pop() === '1') return done();
     shell.exec([
       // Each item is one command.
       'cd ' + __dirname,
-      'cat ' + __dirname + '/coverage/lcov.info | ' + __dirname + '/node_modules/coveralls/bin/coveralls.js'
+      'cat ' + __dirname + '/coverage/lcov.info | ' + __dirname + '/node_modules/coveralls/bin/coveralls.js',
     ].join(';'));
     done();
   });
@@ -151,11 +154,10 @@ gulp.task('travis', ['lint'], function uploadCoverage(cb) {
   });
 });
 
-gulp.task('watch', ['build'], function watch(done) {
+gulp.task('watch', ['build'], function watch() {
   MOCHA_OPTS.reporter = 'min';
-  gulp.watch(SRC_JS, function runTests() {
-    test(function runTests(stream) {
-      stream.on('error', noop);
+  return gulp.watch(SRC_JS, function onWatch() {
+    test(function afterTests(stream) {
     });
   });
 });
