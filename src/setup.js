@@ -1,4 +1,5 @@
 /* (c) 2015 Ari Porad (@ariporad) <http://ariporad.com>. License: ariporad.mit-license.org */
+/* istanbul ignore next: this doesn't need to be tested */
 if (!global._hasDoneSetup) {
   global._hasDoneSetup = true;
   const Bluebird = require('bluebird');
