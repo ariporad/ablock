@@ -21,35 +21,53 @@ const TYPES = [
 ];
 
 /* istanbul ignore next: a) nothing to test, b) implimentation detail */
-function makeOutput(ok, error = null, ignore = false) {
-  return { ok, error, ignore };
+/**
+ * Creates an output object. If ignore = true, then error = null and ok = true. If ok = true, error = null
+ * @param {boolean} [ok=true] - Is the message valid?
+ * @param {error|string} [error=null] - What's wrong with the message? (Ignored if ok = true)
+ * @param {boolean} [ignore=false] - Was this message ignored?
+ * @return {{ok: boolean, error: (string|null), ignore: boolean}}
+ */
+function makeOutput(ok = true, error = null, ignore = false) {
+  ok = !!ok;
+  ignore = !!ignore;
+  if (ignore) ok = true;
+  if (ok) error = null;
+  if (error && error.message) error = error.message;
+
+  return { ok, error: `${error}` || null, ignore };
 }
 
+/**
+ * Validates a commit message.
+ * @param {string} message - the message to validate
+ * @return {{ok: boolean, error: (string|null), ignore: boolean}}
+ */
 function validateMessage(message) {
   if (IGNORED.test(message)) {
     return makeOutput(true, null, true);
   }
 
   if (message.length > MAX_LENGTH) {
-    return makeOutput(false, `Commit message is longer than ${MAX_LENGTH} characters!`, false);
+    return makeOutput(false, `Commit message is longer than ${MAX_LENGTH} characters!`);
   }
 
   const match = PATTERN.exec(message);
 
   if (!match) {
-    return makeOutput(false, `Commit message does not match "<type>(<scope>): <subject>"!`, false);
+    return makeOutput(false, `Commit message does not match "<type>(<scope>): <subject>"!`);
   }
 
   const [, type /* , , scope, subject */ ] = match;
 
   if (TYPES.indexOf(type) === -1) {
-    return makeOutput(false, `"${type}" is not an allowed type!`, false);
+    return makeOutput(false, `"${type}" is not an allowed type!`);
   }
 
   // Some more ideas, do want anything like this ?
   // - allow only specific scopes (eg. fix(docs) should not be allowed) ?
 
-  return makeOutput(true, null, false);
+  return makeOutput();
 }
 
 module.exports = validateMessage;
