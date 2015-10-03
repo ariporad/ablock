@@ -3,14 +3,16 @@
 if (!global._hasDoneSetup) {
   global._hasDoneSetup = true;
 
-  if(!global.Bluebird) global.Bluebird = require('bluebird');
+  require('dotenv').load();
+
+  if (!global.Bluebird) global.Bluebird = require('bluebird');
   global.Promise = global.Bluebird;
 
 // This will throw an error if loaded twice.
 // This will also use Bluebird promises.
   try {
     require('babel/polyfill');
-  } catch (e) {
+  } catch (err) {
     // Babel throws an error if loaded more than once. We don't care.
   }
 

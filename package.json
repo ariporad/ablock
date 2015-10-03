@@ -62,6 +62,7 @@
   "dependencies": {
     "app-module-path": "^1.0.4",
     "bluebird": "^2.10.1",
+    "dotenv": "^1.2.0",
     "koa": "^1.0.0",
     "koa-parse-json": "^1.0.1",
     "koa-router": "^5.1.2",
