@@ -45,6 +45,7 @@
     "load-deps": "1.0.3",
     "mocha": "2.3.3",
     "openport": "0.0.4",
+    "proxyquire": "^1.7.2",
     "rewire": "2.3.4",
     "shelljs": "^0.5.3",
     "sinomocha": "0.2.4",
