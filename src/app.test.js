@@ -61,8 +61,6 @@ describe('app', () => {
         server = data.server;
         done();
       });
-
-      //throw new Error('testing');
     });
     describe('/', () => {
       it('200 OK, JSON', () => {
