@@ -259,3 +259,7 @@ tramp
 build
 dist
 
+
+### Private ###
+.env
+
