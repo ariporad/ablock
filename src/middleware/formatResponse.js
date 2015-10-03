@@ -19,10 +19,11 @@ function makeResponseFormatter() {
       this.body = { ok: false, error: (this.body instanceof Error ? this.body.message : this.body) };
       if (!isErrorStatusCode(this.status)) this.status = 500;
     } else {
-      this.body = { ok: true, payload: this.body };
+      this.body = { ok: this.body.ok || true, payload: this.body.payload || this.body };
     }
   };
 }
 
 module.exports = makeResponseFormatter;
+// Export for testing
 module.exports._isErrorStatusCode = isErrorStatusCode;

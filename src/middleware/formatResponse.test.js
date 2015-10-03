@@ -20,8 +20,9 @@ describe('formatResponse', () => {
     };
   }
 
-  function callFormatter(next = noop, ctx = { body: {}, status: 404 }) {
+  function callFormatter(next = noop, body = {}, status = 404, ctx = {}) {
     next = wrapFn(next)();
+    ctx = { body, status, ...ctx };
     return co.call(ctx, formatResponse(), next).then(() => ctx);
   }
 
@@ -71,8 +72,11 @@ describe('formatResponse', () => {
 
       it('UNLESS it has already been set to something that is not 2xx or 404', () => {
         function verifyExpectedStatus(start = 404, expected = start) {
-          return expect(callFormatter(throwError, { body: {}, status: start }).then(ctx => ctx.status)).to.eventually.equal(expected);
+          return expect(callFormatter(throwError, {}, start)
+                          .then(ctx => ctx.status))
+                          .to.eventually.equal(expected);
         }
+
         const verifyKeep = status => verifyExpectedStatus(status);
         const verifyIgnore = status => verifyExpectedStatus(status, 500);
 
@@ -87,12 +91,18 @@ describe('formatResponse', () => {
     });
   });
   describe('without an error', () => {
-    it('ok = false', () => {
-      expect(callFormatter(throwError).then(ctx => ctx.body.ok)).to.eventually.equal(false);
+    it('ok = true', () => {
+      expect(callFormatter().then(ctx => ctx.body.ok)).to.eventually.equal(true);
     });
 
-    it('res.error === error.message', () => {
-      return expect(callFormatter(throwError).then(ctx => ctx.body.error)).to.eventually.equal(errorMessage);
+    it('res.payload === ctx.body', () => {
+      const body = { Ari: 'awesome', foo: 'bar', baz: 'qux' };
+      return expect(callFormatter(noop, body).then(ctx => ctx.body.payload)).to.eventually.equal(body);
+    });
+
+    it('if body is a properly formatted response, it should do nothing', () => {
+      const body = { ok: true, payload: { ari: 'awesome' } };
+      return expect(callFormatter(noop, body).then(ctx => ctx.body)).to.eventually.deep.equal(body);
     });
   });
 });
