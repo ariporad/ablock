@@ -19,6 +19,7 @@ function makeResponseFormatter() {
       this.body = { ok: false, error: (this.body instanceof Error ? this.body.message : this.body) };
       if (!isErrorStatusCode(this.status)) this.status = 500;
     } else {
+      /* istanbul ignore next: just a default */
       this.body = this.body || {};
       this.body = { ok: this.body.ok || true, payload: this.body.payload || this.body };
     }
