@@ -3,7 +3,7 @@
 /* eslint-env mocha */
 const proxyquire = require('proxyquire');
 
-describe('passport', () => {
+describe('auth/strategies/github', () => {
   describe('_processAuth', () => {
     let processAuth;
     let user;
@@ -11,7 +11,7 @@ describe('passport', () => {
     let options;
 
     before(() => {
-      processAuth = proxyquire('./passport', {
+      processAuth = proxyquire('./github', {
         'models/User': {
           findOrCreate(opts) {
             options = opts;
@@ -40,6 +40,13 @@ describe('passport', () => {
         expect(usr).to.equal(user);
         done();
       });
+    });
+  });
+
+  describe('strategy', () => {
+    it('should be a passport-github strategy', () => {
+      // Proxyquire it here to ignore the require cache
+      expect(proxyquire('./github', {})()).to.be.an.instanceof(require('passport-github').Strategy);
     });
   });
 });

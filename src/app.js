@@ -7,7 +7,7 @@ const passport = require('koa-passport');
 const session = require('koa-session');
 const User = require('models/User'); // FIXME: don't have this here for promise stuff.
 
-require('config/passport');
+require('auth/passport')(passport);
 
 module.exports.start = (port) => {
   const app = koa();
