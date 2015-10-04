@@ -35,8 +35,8 @@ var LINT_OTHER = [__filename, SPIKES + '/**.js'];
 var TESTS = [SRC + '/**/*.test.js'];
 var MOCHA_OPTS = {
   require: [
-    __dirname + '/' + DEST + '/setup.js',
     __dirname + '/test/setup.js',
+    __dirname + '/' + DEST + '/setup.js',
   ],
   reporter: 'spec',
 };
