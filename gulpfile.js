@@ -12,8 +12,8 @@ var plugins = require('load-deps')('gulp-*', {
 
 function logErrors(stream) {
   stream.on('error', function logError(err) {
-    err.message && console.error(err.message);
-    err.stack && console.error(err.stack);
+    if (err.message) console.error(err.message);
+    if (err.stack) console.error(err.stack);
   });
 }
 
