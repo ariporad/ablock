@@ -5,16 +5,16 @@ if (!global._hasDoneSetup) {
 
   require('dotenv').load();
 
-  if (!global.Bluebird) global.Bluebird = require('bluebird');
-  global.Promise = global.Bluebird;
-
 // This will throw an error if loaded twice.
-// This will also use Bluebird promises.
   try {
     require('babel/polyfill');
   } catch (err) {
     // Babel throws an error if loaded more than once. We don't care.
   }
+
+// Override Babel's promises.
+  if (!global.Bluebird) global.Bluebird = require('bluebird');
+  global.Promise = global.Bluebird;
 
 // This has a build in multiple call check
   require('app-module-path').addPath(__dirname);
