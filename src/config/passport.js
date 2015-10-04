@@ -11,13 +11,8 @@ const githubOptions = {
 };
 
 function processAuth(accessToken, refreshToken, { username, displayName: name, _json: profile }, done) {
-  console.log(arguments);
   User.findOrCreate({ where: { username }, defaults: { username, name, profile } })
-    .spread((user, created) => {
-      console.log(user.get({ plain: true }));
-      console.log('created:', created);
-      done(user);
-    });
+    .spread((user, created) => done(user));
 }
 
 passport.use(new GitHubStrategy(githubOptions, processAuth));
