@@ -9,7 +9,8 @@ const jwtOptions = {
   // TODO: I don't understand issuer and audience, and I think I'm using them wrong.
   issuer: process.env.HOSTNAME,
   audience: process.env.HOSTNAME,
-  algorithms: ['HS256', 'HS384'], // TODO: I don't understand these either. This is just the default. Pick good ones.
+  // TODO: I don't understand these either. This is just the default. Pick good ones.
+  algorithms: ['HS256', 'HS384'],
   authScheme: 'Bearer',
 };
 

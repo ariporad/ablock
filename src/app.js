@@ -3,11 +3,9 @@ const http = require('http');
 const koa = require('koa');
 const koaRouter = require('koa-router');
 const formatResponse = require('./middleware/formatResponse');
-const passport = require('koa-passport');
+const passport = require('auth/passport')(require('koa-passport'));
 const session = require('koa-session');
 const User = require('models/User'); // FIXME: don't have this here for promise stuff.
-
-require('auth/passport')(passport);
 
 module.exports.start = (port) => {
   const app = koa();
