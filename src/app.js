@@ -4,7 +4,6 @@ const koa = require('koa');
 const koaRouter = require('koa-router');
 const formatResponse = require('./middleware/formatResponse');
 const passport = require('auth/passport')(require('koa-passport'));
-const session = require('koa-session');
 const User = require('models/User'); // FIXME: don't have this here for promise stuff.
 
 module.exports.start = (port) => {
@@ -26,13 +25,9 @@ module.exports.start = (port) => {
              })
   );
 
-  app.keys = ['secret'];
-
   app
     .use(require('koa-bodyparser')())
-    .use(session(app))
     .use(passport.initialize())
-    .use(passport.session())
     .use(formatResponse())
     .use(router.routes())
     .use(router.allowedMethods());
