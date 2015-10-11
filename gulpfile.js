@@ -3,5 +3,6 @@
 require('babel/register')({
   only: /\/gulp\//,
 });
+global.Promise = global.Bluebird = require('bluebird');
 
 require('require-dir')('./gulp');

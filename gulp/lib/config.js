@@ -22,6 +22,16 @@ config.clean = {
 };
 
 config.tests = join(config.src, '**', '*.test.js');
+
+config.codeCoverage = {
+  thresholds: {
+    statements: 90,
+    functions: 90,
+    branches: 90,
+    lines: 90
+  },
+};
+
 config.mocha = {
   // Because of child_process.spawn nonsense, we have to specify the option name and value as seperate strings.
   opts: [
