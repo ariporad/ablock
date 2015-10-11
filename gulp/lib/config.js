@@ -17,6 +17,10 @@ config.lint = {
   other: [resolve(__dirname, '..'), join(config.spikes, '**', '*.js')],
 };
 
+config.clean = {
+  other: [basePath('coverage')],
+};
+
 config.tests = join(config.src, '**', '*.test.js');
 config.mocha = {
   // Because of child_process.spawn nonsense, we have to specify the option name and value as seperate strings.
