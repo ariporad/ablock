@@ -22,16 +22,8 @@ const uploadCoverage = () => {
 };
 
 const travis = () => {
-  // This way we can good/bad based off tests passing, but still upload coverage
-  return new Promise((good, bad) => {
-    let passed = true;
-    const done = () => passed ? good() : bad();
-
-    return testCov()
-      .catch(() => { passed = false; }) // Curly braces so we don't return pass bad through the chain.
-      .then(uploadCoverage)
-      .then(done, done);
-  });
+  return testCov()
+    .finally(uploadCoverage);
 };
 
 gulp.task('travis', ['lint'], travis);
