@@ -17,15 +17,20 @@ config.lint = {
   other: [resolve(__dirname, '..'), join(config.spikes, '**', '*.js')],
 };
 
-config.tests = [join(config.src, '**', '*.test.js')];
+config.tests = join(config.src, '**', '*.test.js');
 config.mocha = {
-  opts: {
-    require: [
-      join(config.dest, 'setup.js'),
-      basePath('test', 'setup.js'),
-    ],
-    reporter: 'spec',
-  }
+  // Because of child_process.spawn nonsense, we have to specify the option name and value as seperate strings.
+  opts: [
+    '--require', join(config.dest, 'setup.js'),
+    '--require', basePath('test', 'setup.js'),
+    config.tests.replace(config.src, config.dest),
+  ],
+
+  pathToMocha: resolve(__dirname, '..', '..', 'node_modules', '.bin', 'mocha'),
+
+  env: Object.assign({}, process.env, {
+    NODE_ENV: 'test',
+  }),
 };
 
 config.babel = {

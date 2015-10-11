@@ -8,8 +8,14 @@ const logErrorsHandler = (err) => {
 
 module.exports.logErrors = stream => stream.on('error', logErrorsHandler);
 
-module.exports.negate = paths => paths.map(path => `!${path}`);
-module.exports.toDest = paths => paths.map(path => path.replace(src, dest));
+module.exports.negate = (paths) => {
+  if (!(paths instanceof Array)) paths = [paths];
+  return paths.map(path => `!${path}`);
+};
+module.exports.toDest = (paths) => {
+  if (!(paths instanceof Array)) paths = [paths];
+  return paths.map(path => path.replace(src, dest));
+};
 
 module.exports.noop = () => {};
 
@@ -19,14 +25,12 @@ module.exports.streamToPromise = (stream) => {
     stream.once('error', (err) => {
       if (isDone) return;
       isDone = true;
-      console.log('er');
       bad(err);
     });
 
     stream.once('end', () => {
       if (isDone) return;
       isDone = true;
-      console.log('e');
       good(stream);
     });
   })

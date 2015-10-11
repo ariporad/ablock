@@ -1,39 +1,32 @@
 /* (c) 2015 Ari Porad (@ariporad) <http://ariporad.com>. License: ariporad.mit-license.org */
 const gulp = require('gulp');
-const compile = require('./lib/compile');
+const _ = require('lodash');
+const { resolve } = require('path');
 const config = require('./lib/config');
-const { mocha, istanbul } = require('./lib/plugins');
-const { logErrors, toDest, negate, streamToPromise } = require('./lib/helpers');
+const test = require('./test');
 
-const instrumentCode = () => {
-  return gulp.src(toDest(config.srcJs.concat(negate(config.tests))))
-    .pipe(istanbul())
-    .pipe(istanbul.hookRequire());
-};
+const node_modules = resolve(__dirname, '..', 'node_modules', '.bin');
+const istanbul = resolve(node_modules, 'istanbul');
+const _mocha = resolve(node_modules, '_mocha');
 
-const runCoveredTests = () => {
-  const coverageStream = gulp.src(toDest(config.tests))
-    .pipe(mocha(config.mocha.opts))
-    .pipe(istanbul.writeReports())
-    .pipe(istanbul.enforceThresholds({ thresholds: { global: 90 }})); // TODO: move to config
-  logErrors(coverageStream);
-  return coverageStream;
+const changeMochaOptions = () => {
+  let originalMochaConfig = _.cloneDeep(config.mocha);
+  config.mocha.pathToMocha = istanbul;
+  config.mocha.opts.unshift('cover', _mocha, '--');
+
+  return () => config.mocha = originalMochaConfig;
 };
 
 const testCov = () => {
-  return compile(config.srcJs, config.dest).promise
-    .then(instrumentCode)
-    .then(s => new Promise(s.once.bind(s, 'end')))
-    .then(() => console.log('TODO: test:cov exiting silently. Debug?'))
-    .then(runCoveredTests)
-    .then(streamToPromise);
+  const revertMochaOptions = changeMochaOptions();
+  const passThroughRevertMochaOptions = (result) => {
+    revertMochaOptions();
+    return result;
+  };
+  return test()
+    .then(passThroughRevertMochaOptions); // TODO: revert on error.
 };
 
-gulp.task('test:cov', ['lint'], () => {
-  return testCov()
-    .then(() => console.log('TODO: test:cov exiting silently. Debug?'))
-    .then(() => process.exit(0))
-    .catch(() => process.exit(1));
-});
+gulp.task('test:cov', ['lint'], testCov);
 
 module.exports = testCov;
