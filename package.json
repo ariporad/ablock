@@ -9,7 +9,8 @@
     "build": "gulp build",
     "watch": "gulp watch",
     "lint": "gulp lint",
-    "travis": "gulp travis"
+    "travis": "gulp travis",
+    "clean": "gulp clean"
   },
   "repository": {
     "type": "git",
