@@ -1,6 +1,6 @@
 /* (c) 2015 Ari Porad (@ariporad) <http://ariporad.com>. License: ariporad.mit-license.org */
 const gulp = require('gulp');
-const exec = require('child_process');
+const { exec } = require('child_process');
 const { resolve } = require('path');
 const { basePath } = require('./lib/config');
 const testCov = require('./test-cov');
