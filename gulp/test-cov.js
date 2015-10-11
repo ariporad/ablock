@@ -17,6 +17,7 @@ const changeMochaOptions = () => {
   return () => config.mocha = originalMochaConfig;
 };
 
+// TODO: fail if CC is too low (istanbul check-coverage), clean up, remove unneeded deps
 const testCov = () => {
   const revertMochaOptions = changeMochaOptions();
   const passThroughRevertMochaOptions = (result) => {
