@@ -8,7 +8,7 @@ const testCov = require('./test-cov');
 
 const lcov = resolve(basePath, 'coverage', 'lcov.info');
 const coveralls = resolve(basePath, 'node_modules', 'coveralls', 'bin', 'coveralls.js');
-const coverageUploadCommand = `cat ${lcov} && echo "Coverage Uploaded"`;
+const coverageUploadCommand = `cat ${lcov} | ${coveralls} -v; echo "Coverage Uploaded"`;
 
 const uploadCoverage = () => {
   // Only upload coverage once
