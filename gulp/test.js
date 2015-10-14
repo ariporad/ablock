@@ -16,7 +16,7 @@ const runMocha = (type) => {
       stdio: 'inherit',
       env: config.mocha.env,
     })
-      .on('close', code => code === 0 ? good() : bad())
+      .on('close', code => code === 0 ? good() : bad('Tests Failed'))
       .on('error', bad);
   });
 };
