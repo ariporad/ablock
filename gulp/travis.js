@@ -8,11 +8,11 @@ const testCov = require('./test-cov');
 
 const lcov = resolve(basePath, 'coverage', 'lcov.info');
 const coveralls = resolve(basePath, 'node_modules', '.bin', 'coveralls');
-const coverageUploadCommand = `cat ${lcov} | ${coveralls}`;
+const coverageUploadCommand = `cat ${lcov} | ${coveralls} && echo "Coverage Uploaded"`;
 
 const uploadCoverage = () => {
   // Only upload coverage once
-  if ((process.env.TRAVIS_JOB_NUMBER || '0.1').split('.').pop() === '1') return;
+  if ((process.env.TRAVIS_JOB_NUMBER || '0.1').split('.').pop() !== '1') return;
 
   return new Promise((good, bad) => {
     exec(coverageUploadCommand, (err, stdout, stderr) => {
