@@ -17,7 +17,7 @@ describe('validate/angular', () => {
     const { error: dirtyError, ignore, ok } = validate(message);
     const error = dirtyError.toLowerCase();
 
-    expect(error).to.be.ok;
+    expect(error).to.be.ok; /* eslint-disable-line no-unused-expressions */
     expect(ok).to.equal(false);
     expect(ignore).to.equal(false);
 
