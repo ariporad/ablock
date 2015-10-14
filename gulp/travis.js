@@ -25,7 +25,7 @@ const uploadCoverage = () => {
 };
 
 const travis = () => {
-  return testCov()
+  return testCov(process.env.TEST_TYPES || 'all')
     .finally(uploadCoverage);
 };
 
