@@ -26,6 +26,10 @@ const test = (type) => {
     .then((arg) => runMocha(type, arg));
 };
 
-config.tests.types.map(type => gulp.task(`test:${type}`, ['lint'], () => test(type)));
+const testTaskDeps = ['lint'];
+const defineTestTask = (name, type) => gulp.task(name, testTaskDeps, () => test(type));
+
+config.tests.types.map(type => defineTestTask(`test:${type}`, type));
+defineTestTask('test', 'all');
 
 module.exports = test;

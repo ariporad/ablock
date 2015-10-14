@@ -38,6 +38,9 @@ const testCov = (type) => {
     .then(checkCoverage);
 };
 
-config.tests.types.map(type => gulp.task(`test:${type}:cov`, () => testCov(type)));
+const defineTestCovTask = (name, type) => gulp.task(name, () => testCov(type));
+
+config.tests.types.map(type => defineTestCovTask(`test:${type}:cov`, type));
+defineTestCovTask('test:cov', 'all');
 
 module.exports = testCov;

@@ -1,7 +1,7 @@
 /* (c) 2015 Ari Porad (@ariporad) <http://ariporad.com>. License: ariporad.mit-license.org */
 /* global expect:false, assert:false, request:false */
 /* eslint-env mocha */
-const proxyquire = require('proxyquire').noPreserveCache();
+const proxyquire = require('proxyquire').noPreserveCache().noCallThru();
 
 
 function expectAppOnPort(expectedPort, done) {
@@ -15,6 +15,7 @@ function expectAppOnPort(expectedPort, done) {
     },
   });
 }
+
 
 describe('index', () => {
   it('should require app, and start it on process.env.PORT', (done) => {

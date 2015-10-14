@@ -46,10 +46,10 @@ config.mocha = {
     '--require', basePath('test', 'setup.js'),
   ],
 
-  files: config.tests.all.replace(config.src, config.dest),
+  files: config.tests.all,
 
   get opts() {
-    return config.mocha.args.concat([config.mocha.files]);
+    return config.mocha.args.concat([config.mocha.files.replace(config.src, config.dest)]);
   },
 
   pathToMocha: resolve(__dirname, '..', '..', 'node_modules', '.bin', 'mocha'),
