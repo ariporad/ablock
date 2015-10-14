@@ -13,7 +13,7 @@ const _mocha = resolve(node_modules, '_mocha');
 const changeMochaOptions = () => {
   let originalMochaConfig = _.cloneDeep(config.mocha);
   config.mocha.pathToMocha = istanbul;
-  config.mocha.opts.unshift('cover', _mocha, '--');
+  config.mocha.args.unshift('cover', _mocha, '--');
 
   return () => config.mocha = originalMochaConfig;
 };
@@ -30,14 +30,14 @@ const checkCoverage = () => {
   });
 };
 
-// TODO: clean up, remove unneeded deps
-const testCov = (cb) => {
+
+const testCov = (type) => {
   const revertMochaOptions = changeMochaOptions();
-  return test()
+  return test(type)
     .finally(revertMochaOptions)
     .then(checkCoverage);
 };
 
-gulp.task('test:cov', ['lint'], testCov);
+config.tests.types.map(type => gulp.task(`test:${type}:cov`, () => testCov(type)));
 
 module.exports = testCov;

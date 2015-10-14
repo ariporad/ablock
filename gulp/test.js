@@ -8,8 +8,9 @@ const { mocha } = require('./lib/plugins');
 const { logErrors, toDest, streamToPromise } = require('./lib/helpers');
 
 
-const runMocha = () => {
+const runMocha = (type) => {
   return new Promise((good, bad) => {
+    config.mocha.files = config.tests[type];
     spawn(config.mocha.pathToMocha, config.mocha.opts, {
       cwd: resolve(__dirname, '..'),
       stdio: 'inherit',
@@ -20,11 +21,11 @@ const runMocha = () => {
   });
 };
 
-const test = () => {
+const test = (type) => {
   return compile(config.srcJs, config.dest).promise
-    .then(runMocha);
+    .then((arg) => runMocha(type, arg));
 };
 
-gulp.task('test', ['lint'], test);
+config.tests.types.map(type => gulp.task(`test:${type}`, ['lint'], () => test(type)));
 
 module.exports = test;

@@ -21,7 +21,14 @@ config.clean = {
   other: [basePath('coverage')],
 };
 
-config.tests = join(config.src, '**', '*.test.js');
+config.tests = {
+  // The rest is auto generated later, for maximum DRYness, using the path `$src/**/*.test.$type.js`
+  types: ['unit', 'int', 'all'],
+};
+config.tests.types.forEach(type => config.tests[type] = join(config.src, '**', `*.test.${type}.js`));
+// We have to override this here, because we don't want the path to be `$src/**/*.test.all.js`
+config.tests.all = join(config.src, '**', '*.test.*.js');
+
 
 config.codeCoverage = {
   thresholds: {
@@ -34,11 +41,16 @@ config.codeCoverage = {
 
 config.mocha = {
   // Because of child_process.spawn nonsense, we have to specify the option name and value as seperate strings.
-  opts: [
+  args: [
     '--require', join(config.dest, 'setup.js'),
     '--require', basePath('test', 'setup.js'),
-    config.tests.replace(config.src, config.dest),
   ],
+
+  files: config.tests.all.replace(config.src, config.dest),
+
+  get opts() {
+    return config.mocha.args.concat([config.mocha.files]);
+  },
 
   pathToMocha: resolve(__dirname, '..', '..', 'node_modules', '.bin', 'mocha'),
 
