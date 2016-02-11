@@ -54,7 +54,7 @@
     "sinon": "1.17.1",
     "sinon-chai": "2.8.0",
     "source-map-support": "0.3.2",
-    "supertest": "^1.1.0",
+    "supertest": "^1.2.0",
     "supertest-promised": "^0.1.0"
   },
   "license": "MIT",
