@@ -64,7 +64,7 @@
   "homepage": "https://github.com/ariporad/ablock#readme",
   "dependencies": {
     "app-module-path": "^1.0.4",
-    "bluebird": "^3.0.5",
+    "bluebird": "^3.3.1",
     "dotenv": "^1.2.0",
     "koa": "^1.0.0",
     "koa-parse-json": "^1.0.1",
