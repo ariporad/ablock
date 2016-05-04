@@ -44,7 +44,7 @@
     "gulp-util": "^3.0.6",
     "load-deps": "1.0.3",
     "mocha": "^2.3.3",
-    "node-pg-migrate": "0.0.9",
+    "node-pg-migrate": "0.0.10",
     "openport": "0.0.4",
     "pg": "^4.4.2",
     "proxyquire": "^1.7.2",
