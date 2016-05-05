@@ -47,7 +47,7 @@
     "node-pg-migrate": "0.0.9",
     "openport": "0.0.4",
     "pg": "^4.4.2",
-    "proxyquire": "^1.7.2",
+    "proxyquire": "^1.7.6",
     "require-dir": "^0.3.0",
     "rewire": "2.5.0",
     "sinomocha": "0.2.4",
