@@ -43,7 +43,7 @@
     "gulp-sourcemaps": "1.6.0",
     "gulp-util": "^3.0.6",
     "load-deps": "1.0.3",
-    "mocha": "^2.3.3",
+    "mocha": "^2.5.1",
     "node-pg-migrate": "0.0.9",
     "openport": "0.0.4",
     "pg": "^4.4.2",
