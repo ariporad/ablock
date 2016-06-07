@@ -46,7 +46,7 @@
     "mocha": "^2.3.3",
     "node-pg-migrate": "0.0.9",
     "openport": "0.0.4",
-    "pg": "^4.4.2",
+    "pg": "^5.0.0",
     "proxyquire": "^1.7.2",
     "require-dir": "^0.3.0",
     "rewire": "2.5.0",
